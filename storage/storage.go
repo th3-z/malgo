@@ -24,7 +24,7 @@ func CreateSchema(db *sql.DB) {
     }
 }
 
-func ins(db *sql.DB, query string, args...string) int64 {
+func PreparedQuery(db *sql.DB, query string, args ...interface{}) int64 {
     stmt, err := db.Prepare(query)
     if (err != nil) {
         panic(err)
@@ -35,18 +35,16 @@ func ins(db *sql.DB, query string, args...string) int64 {
         panic(err)
     }
 
-    id, _ := res.LastInsertId()
-    return id
-}
+    insertId, err := res.LastInsertId()
+    if err == nil {
+        return insertId
+    }
 
+    affectedRows, err := res.RowsAffected()
+    if err == nil {
+        return affectedRows
+    }
 
-func AddUser(db *sql.DB, name string) {
-    query  := `
-        INSERT INTO user (name)
-        VALUES (?)
-    `
-
-    insert_id := ins(db, query, name)
-    print(string(insert_id))
+    return 0
 }
 

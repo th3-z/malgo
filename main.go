@@ -4,11 +4,14 @@ import (
     "database/sql"
 	_"github.com/mattn/go-sqlite3"
     "./storage"
+    "fmt"
 )
 
 
 func migrate(db *sql.DB) {
-    storage.AddUser(db, "the_z")
+    user_id := storage.AddUser(db, "the_z")
+
+    fmt.Printf("%d\n", user_id)
 }
 
 func main() {
@@ -19,6 +22,6 @@ func main() {
     migrate(db)
     db.Close()
 
-    print("Done.\n")
+    fmt.Printf("Done.\n")
 }
 
