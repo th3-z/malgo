@@ -1,8 +1,11 @@
 build:
-	@go build -o server server.go
+	@go build -o mal-sqlite-migrate mal_sqlite_migrate.go
+	@chmod +x ./mal-sqlite-migrate
 
 run:
-	@./server
+	@./mal-sqlite-migrate
 
 clean:
-	@rm server
+	@rm ./mal-sqlite-migrate
+	@rm ./output.sqlite
+
