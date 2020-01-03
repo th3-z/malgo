@@ -11,30 +11,103 @@ func AddUser(db Queryer, user *path.User) int64 {
         VALUES (?)
     `
 
-	insert_id := PreparedQuery(db, query, user.UserName)
+	insert_id := PreparedExec(db, query, user.UserName)
 	return insert_id
 }
 
-func AddAnime(db Queryer, anime *path.Anime) int64 {
+func AddSeriesType(db Queryer, seriesType string) int64 {
+    query := `
+        INSERT OR IGNORE INTO series_type (
+            name
+        ) VALUES (
+            ?
+        )
+    `
+
+    insertId := PreparedExec(
+        db, query,
+        seriesType,
+    )
+
+    if insertId > 0 && false {
+        print("no")
+        return insertId
+    } else {
+        query = `
+            SELECT
+                series_type_id
+            FROM
+                series_type
+            WHERE
+                name = ?
+        `
+        return PreparedExec(
+            db, query,
+            seriesType,
+        )
+    }
+
+}
+
+func AddSeries(db Queryer, anime *path.Anime) int64 {
+    seriesTypeId := AddSeriesType(db, anime.SeriesType)
+
 	query := `
         INSERT INTO series (
             name,
             animedb_id,
-            series_type_id,
-            series_status_id
+            episodes,
+            series_type_id
         ) VALUES (
             ?,
             ?,
-            1,
-            1
+            ?,
+            ?
         )
     `
+    print(seriesTypeId)
+    print(anime.SeriesType)
 
-	insert_id := PreparedQuery(db, query, anime.SeriesTitle, anime.SeriesAnimeDbId)
-	return insert_id
+	return PreparedExec(
+        db, query,
+        anime.SeriesTitle,
+        anime.SeriesAnimeDbId,
+        anime.SeriesEpisodes,
+        seriesTypeId,
+    )
 }
 
-func AddUserAnime(db Queryer, userId int, seriesId int) int64 {
+func SetSeriesType(db Queryer, seriesId int64, seriesTypeId int64) int64 {
+    query := `
+        UPDATE series SET
+            series_type_id = ?
+        WHERE
+            series_id = ?
+    `
+
+    return PreparedExec(
+        db, query,
+        seriesTypeId,
+        seriesId,
+    )
+}
+
+func SetSeriesStatus(db Queryer, seriesId int64, seriesStatusId int64) int64 {
+    query := `
+        UPDATE series SET
+            series_status_id = ?
+        WHERE
+            series_id = ?
+    `
+
+    return PreparedExec(
+        db, query,
+        seriesStatusId,
+        seriesId,
+    )
+}
+
+func AddUserAnime(db Queryer, userId int64, seriesId int64) int64 {
 	query := `
         INSERT INTO user_series (
             user_id,
@@ -45,6 +118,6 @@ func AddUserAnime(db Queryer, userId int, seriesId int) int64 {
         )
     `
 
-	insert_id := PreparedQuery(db, query, userId, seriesId)
-	return insert_id
+	return PreparedExec(db, query, userId, seriesId)
 }
+

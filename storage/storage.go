@@ -29,7 +29,7 @@ func InitDB(filepath string) *sql.DB {
 }
 
 func CreateSchema(db Queryer) {
-	query := schema // storage/schema.go
+	query := schema  // storage/schema.go
 	_, err := db.Exec(query)
 
 	if err != nil {
@@ -37,7 +37,7 @@ func CreateSchema(db Queryer) {
 	}
 }
 
-func PreparedQuery(db Queryer, query string, args ...interface{}) int64 {
+func PreparedExec(db Queryer, query string, args ...interface{}) int64 {
 	stmt, err := db.Prepare(query)
 	if err != nil {
 		panic(err)
@@ -59,4 +59,28 @@ func PreparedQuery(db Queryer, query string, args ...interface{}) int64 {
 	}
 
 	return 0
+}
+
+func PreparedQuery(db Queryer, query string, args ...interface{}) *sql.Rows {
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		panic(err)
+	}
+
+	rows, err := stmt.Query(args...)
+	if err != nil {
+		panic(err)
+	}
+
+    return rows
+}
+
+
+func PreparedQueryRow(db Queryer, query string, args ...interface{}) *sql.Row {
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		panic(err)
+	}
+
+	return stmt.QueryRow(args...)
 }

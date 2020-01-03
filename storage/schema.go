@@ -12,7 +12,6 @@ const (
             animedb_id INTEGER,
             name VARCHAR(255),
             series_type_id INTEGER,
-            series_status_id INTEGER,
             episodes INTEGER
         );
 
@@ -40,11 +39,6 @@ const (
 
         CREATE TABLE series_type( -- TV, Movie, etc.
             series_type_id INTEGER PRIMARY KEY NOT NULL,
-            name VARCHAR(255) UNIQUE
-        );
-
-        CREATE TABLE series_status( -- Airing, Aired, etc
-            series_status_id INTEGER PRIMARY KEY NOT NULL,
             name VARCHAR(255) UNIQUE
         );
 
