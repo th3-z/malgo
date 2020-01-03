@@ -21,7 +21,7 @@ type user struct {
 
 type anime struct {
 	SeriesTitle       string
-	AnimeDbId         int
+	SeriesAnimeDbId   int
 	SeriesType        string
 	SeriesEpisodes    int
 	MyWatchedEpisodes int
@@ -85,8 +85,38 @@ func GetAnimeList(xml string) []anime {
 
 	for _, animeTreeV := range animeTree {
 		SeriesTitle := animeTreeV.SelectElement("series_title").InnerText()
+		SeriesType := animeTreeV.SelectElement("series_type").InnerText()
+		MyStorage := animeTreeV.SelectElement("my_storage").InnerText()
+		MyStatus := animeTreeV.SelectElement("my_status").InnerText()
+		MyComments := animeTreeV.SelectElement("my_comments").InnerText()
+		MyTags := animeTreeV.SelectElement("my_tags").InnerText()
+
+		SeriesAnimeDbId, _ := strconv.Atoi(animeTreeV.SelectElement("series_animedb_id").InnerText())
+		SeriesEpisodes, _ := strconv.Atoi(animeTreeV.SelectElement("series_episodes").InnerText())
+		MyWatchedEpisodes, _ := strconv.Atoi(animeTreeV.SelectElement("my_watched_episodes").InnerText())
+		MyStartDate, _ := strconv.Atoi(animeTreeV.SelectElement("my_start_date").InnerText())
+		MyFinishDate, _ := strconv.Atoi(animeTreeV.SelectElement("my_finish_date").InnerText())
+		MyScore, _ := strconv.Atoi(animeTreeV.SelectElement("my_score").InnerText())
+		MyTimesWatched, _ := strconv.Atoi(animeTreeV.SelectElement("my_times_watched").InnerText())
+		MyRewatchValue, _ := strconv.Atoi(animeTreeV.SelectElement("my_rewatch_value").InnerText())
+		MyRewatchingEp, _ := strconv.Atoi(animeTreeV.SelectElement("my_rewatching_ep").InnerText())
+
 		a := anime{
-			SeriesTitle: SeriesTitle,
+			SeriesTitle:       SeriesTitle,
+			SeriesType:        SeriesType,
+			SeriesAnimeDbId:   SeriesAnimeDbId,
+			SeriesEpisodes:    SeriesEpisodes,
+			MyWatchedEpisodes: MyWatchedEpisodes,
+			MyStartDate:       MyStartDate,
+			MyFinishDate:      MyFinishDate,
+			MyScore:           MyScore,
+			MyStorage:         MyStorage,
+			MyStatus:          MyStatus,
+			MyComments:        MyComments,
+			MyTags:            MyTags,
+			MyTimesWatched:    MyTimesWatched,
+			MyRewatchValue:    MyRewatchValue,
+			MyRewatchingEp:    MyRewatchingEp,
 		}
 		animeList = append(animeList, a)
 	}
