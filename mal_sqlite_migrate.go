@@ -13,12 +13,17 @@ import (
 
 func migrate(db *sql.DB, xml string) {
     user := path.GetUser(xml)
+    animeList := path.GetAnimeList(xml)
 
-    user_id := storage.AddUser(db, user.Name)
+    for _, anime := range animeList {
+        fmt.Printf("SeriesTitle: %s\n", anime.SeriesTitle)
+    }
+
+    user_id := storage.AddUser(db, user.UserName)
 
     fmt.Printf("sqliteId: %d\n", user_id)
-    fmt.Printf("username: %s\n", user.Name)
-    fmt.Printf("malId: %d\n", user.MalUserId)
+    fmt.Printf("username: %s\n", user.UserName)
+    fmt.Printf("malId: %d\n", user.UserId)
 }
 
 
@@ -43,9 +48,6 @@ func main() {
 	db := storage.InitDB("output.sqlite")
     defer db.Close()
     storage.CreateSchema(db)
-
-
-
     migrate(db, xml)
 
     fmt.Printf("Done.\n")
