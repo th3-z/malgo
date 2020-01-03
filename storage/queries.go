@@ -2,10 +2,10 @@ package storage
 
 import (
 	"../path"
-	"database/sql"
 )
 
-func AddUser(db *sql.DB, user *path.User) int64 {
+
+func AddUser(db Queryer, user *path.User) int64 {
 	query := `
         INSERT INTO user (name)
         VALUES (?)
@@ -15,7 +15,7 @@ func AddUser(db *sql.DB, user *path.User) int64 {
 	return insert_id
 }
 
-func AddAnime(db *sql.DB, anime *path.Anime) int64 {
+func AddAnime(db Queryer, anime *path.Anime) int64 {
 	query := `
         INSERT INTO series (name)
         VALUES (?)
@@ -24,3 +24,4 @@ func AddAnime(db *sql.DB, anime *path.Anime) int64 {
 	insert_id := PreparedQuery(db, query, anime.SeriesTitle)
 	return insert_id
 }
+

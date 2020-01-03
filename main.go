@@ -11,14 +11,20 @@ import (
 )
 
 func migrate(db *sql.DB, xml string) {
+    // Inserts spawn transactions, they are slow, run this in one transaction
+    tx, err := db.Begin()
+    if (err != nil) {
+        panic(err)
+    }
+    defer tx.Commit()
+
 	user := path.GetUser(xml)
-	user_id := storage.AddUser(db, user)
+	user_id := storage.AddUser(tx, user)
 
 	animeList := path.GetAnimeList(xml)
 
-	// TODO: Single transaction insert
 	for _, anime := range animeList {
-		anime_id := storage.AddAnime(db, &anime)
+		anime_id := storage.AddAnime(tx, &anime)
 		fmt.Printf("#%d SeriesTitle: %s - %d (%s)\n",
 			anime_id,
 			anime.SeriesTitle,
