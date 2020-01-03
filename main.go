@@ -12,22 +12,21 @@ import (
 
 func migrate(db *sql.DB, xml string) {
 	user := path.GetUser(xml)
+	user_id := storage.AddUser(db, user.UserName)
+
 	animeList := path.GetAnimeList(xml)
 
 	for _, anime := range animeList {
 		fmt.Printf("SeriesTitle: %s\n", anime.SeriesTitle)
 	}
 
-	user_id := storage.AddUser(db, user.UserName)
 
 	fmt.Printf("sqliteId: %d\n", user_id)
-	fmt.Printf("username: %s\n", user.UserName)
-	fmt.Printf("malId: %d\n", user.UserId)
 }
 
 func main() {
 	var outputFilename string
-	flag.StringVar(&outputFilename, "output", "output.sqlite", "Output file")
+	flag.StringVar(&outputFilename, "o", "output.sqlite", "Output file")
 
 	flag.Parse()
 
@@ -48,5 +47,5 @@ func main() {
 	storage.CreateSchema(db)
 	migrate(db, xml)
 
-	fmt.Printf("Done.\n")
+	fmt.Printf("\nMigration complete!\n")
 }
