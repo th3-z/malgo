@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type user struct {
+type User struct {
 	UserId               int
 	UserName             string
 	UserExportType       int // Unused
@@ -19,7 +19,7 @@ type user struct {
 	UserTotalPlanToWatch int // Unused
 }
 
-type anime struct {
+type Anime struct {
 	SeriesTitle       string
 	SeriesAnimeDbId   int
 	SeriesType        string
@@ -43,7 +43,7 @@ type anime struct {
 	UpdateOnImport int    // Unused
 }
 
-func GetUser(xml string) *user {
+func GetUser(xml string) *User {
 	doc, err := xmlquery.Parse(strings.NewReader(xml))
 	if err != nil {
 		panic(err)
@@ -59,7 +59,7 @@ func GetUser(xml string) *user {
 	UserId, _ := strconv.Atoi(userTree.SelectElement("user_id").InnerText())
 	UserExportType, _ := strconv.Atoi(userTree.SelectElement("user_export_type").InnerText())
 
-	u := user{
+	u := User{
 		UserName:       userTree.SelectElement("user_name").InnerText(),
 		UserId:         UserId,
 		UserExportType: UserExportType,
@@ -68,8 +68,8 @@ func GetUser(xml string) *user {
 	return &u
 }
 
-func GetAnimeList(xml string) []anime {
-	animeList := make([]anime, 0, 0)
+func GetAnimeList(xml string) []Anime {
+	animeList := make([]Anime, 0, 0)
 
 	doc, err := xmlquery.Parse(strings.NewReader(xml))
 	if err != nil {
@@ -90,7 +90,6 @@ func GetAnimeList(xml string) []anime {
 		myStatus := animeTreeV.SelectElement("my_status").InnerText()
 		myComments := animeTreeV.SelectElement("my_comments").InnerText()
 		myTags := animeTreeV.SelectElement("my_tags").InnerText()
-
 		seriesAnimeDbId, _ := strconv.Atoi(animeTreeV.SelectElement("series_animedb_id").InnerText())
 		seriesEpisodes, _ := strconv.Atoi(animeTreeV.SelectElement("series_episodes").InnerText())
 		myWatchedEpisodes, _ := strconv.Atoi(animeTreeV.SelectElement("my_watched_episodes").InnerText())
@@ -101,7 +100,7 @@ func GetAnimeList(xml string) []anime {
 		myRewatchValue, _ := strconv.Atoi(animeTreeV.SelectElement("my_rewatch_value").InnerText())
 		myRewatchingEp, _ := strconv.Atoi(animeTreeV.SelectElement("my_rewatching_ep").InnerText())
 
-		a := anime{
+		a := Anime{
 			SeriesTitle:       seriesTitle,
 			SeriesType:        seriesType,
 			SeriesAnimeDbId:   seriesAnimeDbId,

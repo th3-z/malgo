@@ -3,6 +3,7 @@
 
 # Output
 *.sqlite
+*.sqlite-journal
 
 # Executable
 mal-sqlite-migrate

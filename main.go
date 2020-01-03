@@ -12,12 +12,19 @@ import (
 
 func migrate(db *sql.DB, xml string) {
 	user := path.GetUser(xml)
-	user_id := storage.AddUser(db, user.UserName)
+	user_id := storage.AddUser(db, user)
 
 	animeList := path.GetAnimeList(xml)
 
+	// TODO: Single transaction insert
 	for _, anime := range animeList {
-		fmt.Printf("SeriesTitle: %s - %d (%s)\n", anime.SeriesTitle, anime.MyScore, anime.MyTags)
+		anime_id := storage.AddAnime(db, &anime)
+		fmt.Printf("#%d SeriesTitle: %s - %d (%s)\n",
+			anime_id,
+			anime.SeriesTitle,
+			anime.MyScore,
+			anime.MyTags,
+		)
 	}
 
 	fmt.Printf("sqliteId: %d\n", user_id)
