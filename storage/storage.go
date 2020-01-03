@@ -3,9 +3,13 @@ package storage
 import (
     "database/sql"
 	_"github.com/mattn/go-sqlite3"
+    "os"
 )
 
 func InitDB(filepath string) *sql.DB {
+    if _, err := os.Stat(filepath); err == nil {
+        os.Remove(filepath)
+    }
     db, err := sql.Open("sqlite3", filepath)
 
     if err != nil {
