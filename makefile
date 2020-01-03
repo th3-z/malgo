@@ -10,8 +10,8 @@ run:
 	@./mal-sqlite-migrate
 
 clean:
-	@rm ./mal-sqlite-migrate
-	@rm ./output.sqlite
+	-@rm -f ./mal-sqlite-migrate
+	-@rm -f ./*.sqlite
 
 fmt:
 	@gofmt -l -w $(SRC)
