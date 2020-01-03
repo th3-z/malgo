@@ -7,6 +7,7 @@ import (
     "./path"
     "fmt"
     "io/ioutil"
+    "flag"
 )
 
 
@@ -22,9 +23,18 @@ func migrate(db *sql.DB, xml string) {
 
 
 func main() {
-    // TODO: input and output filename parameter
-    xmlFilename := "input.xml"
-    xmlBytes, err := ioutil.ReadFile(xmlFilename)
+    var outputFilename string
+    flag.StringVar(&outputFilename, "output", "output.sqlite", "Output file")
+
+    flag.Parse()
+
+    args := flag.Args()
+    if len(args) < 1 {
+        panic("No input file specified")
+    }
+
+    inputFilename := args[0]
+    xmlBytes, err := ioutil.ReadFile(inputFilename)
     if err != nil {
         panic(err)
     }
