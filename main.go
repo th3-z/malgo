@@ -24,13 +24,7 @@ func migrate(db *sql.DB, xml string) {
 	animeList := path.GetAnimeList(xml)
 
 	for _, anime := range animeList {
-		anime_id := storage.AddSeries(tx, &anime)
-		fmt.Printf("#%d SeriesTitle: %s - %d (%s)\n",
-			anime_id,
-			anime.SeriesTitle,
-			anime.MyScore,
-			anime.MyTags,
-		)
+		storage.AddSeries(tx, &anime)
 	}
 
 	fmt.Printf("sqliteId: %d\n", user_id)

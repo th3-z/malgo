@@ -1,6 +1,7 @@
 package storage
 
 import (
+    "fmt"
 	"../path"
 )
 
@@ -15,41 +16,43 @@ func AddUser(db Queryer, user *path.User) int64 {
 	return insert_id
 }
 
-func AddSeriesType(db Queryer, seriesType string) int64 {
-    query := `
-        INSERT OR IGNORE INTO series_type (
-            name
-        ) VALUES (
-            ?
-        )
-    `
 
-    insertId := PreparedExec(
+
+func AddSeriesType(db Queryer, seriesType string) int64 {
+    var seriesId int64
+    query := `
+        SELECT
+            series_type_id
+         FROM
+            series_type
+        WHERE
+            name = ?
+    `
+    err := PreparedQueryRow(
         db, query,
         seriesType,
-    )
+    ).Scan(&seriesId)
 
-    if insertId > 0 && false {
-        print("no")
-        return insertId
-    } else {
+    if err != nil {
         query = `
-            SELECT
-                series_type_id
-            FROM
-                series_type
-            WHERE
-                name = ?
+            INSERT OR IGNORE INTO series_type (
+                name
+            ) VALUES (
+                ?
+            )
         `
-        return PreparedExec(
+
+        seriesId = PreparedExec(
             db, query,
             seriesType,
         )
     }
 
+    return seriesId
 }
 
 func AddSeries(db Queryer, anime *path.Anime) int64 {
+    print("w")
     seriesTypeId := AddSeriesType(db, anime.SeriesType)
 
 	query := `
@@ -65,8 +68,8 @@ func AddSeries(db Queryer, anime *path.Anime) int64 {
             ?
         )
     `
-    print(seriesTypeId)
-    print(anime.SeriesType)
+
+    fmt.Printf("Type - %s, TypeId- %d\n", anime.SeriesType, seriesTypeId)
 
 	return PreparedExec(
         db, query,
