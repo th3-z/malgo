@@ -1,75 +1,15 @@
-package path
+package parsers
 
 import (
 	"github.com/antchfx/xmlquery"
 	_ "github.com/antchfx/xpath"
 	"strconv"
 	"strings"
+    "mal-sqlite-migrate/models"
 )
 
-type User struct {
-	UserId               int
-	UserName             string
-	UserExportType       int // Unused
-	UserTotalAnime       int // Unused
-	UserTotalWatching    int // Unused
-	UserTotalCompleted   int // Unused
-	UserTotalOnHold      int // Unused
-	UserTotalDropped     int // Unused
-	UserTotalPlanToWatch int // Unused
-}
-
-type Anime struct {
-	SeriesTitle       string
-	SeriesAnimeDbId   int
-	SeriesType        string
-	SeriesEpisodes    int
-	MyWatchedEpisodes int
-	MyStartDate       int
-	MyFinishDate      int
-	MyScore           int
-	MyStorage         string
-	MyStatus          string
-	MyComments        string
-	MyTimesWatched    int
-	MyRewatchValue    int
-	MyTags            string
-	MyRewatching      int
-	MyRewatchingEp    int
-
-	MyId           int    // Unused
-	MyDvd          string // Unused
-	MyRated        int    // Unused
-	UpdateOnImport int    // Unused
-}
-
-func GetUser(xml string) *User {
-	doc, err := xmlquery.Parse(strings.NewReader(xml))
-	if err != nil {
-		panic(err)
-	}
-
-	userPath := "//myinfo"
-
-	userTree := xmlquery.FindOne(doc, userPath)
-	if err != nil {
-		panic(err)
-	}
-
-	UserId, _ := strconv.Atoi(userTree.SelectElement("user_id").InnerText())
-	UserExportType, _ := strconv.Atoi(userTree.SelectElement("user_export_type").InnerText())
-
-	u := User{
-		UserName:       userTree.SelectElement("user_name").InnerText(),
-		UserId:         UserId,
-		UserExportType: UserExportType,
-	}
-
-	return &u
-}
-
-func GetAnimeList(xml string) []Anime {
-	animeList := make([]Anime, 0, 0)
+func ParseAnimeList(xml string) []models.Anime {
+	animeList := make([]models.Anime, 0, 0)
 
 	doc, err := xmlquery.Parse(strings.NewReader(xml))
 	if err != nil {
@@ -100,7 +40,7 @@ func GetAnimeList(xml string) []Anime {
 		myRewatchValue, _ := strconv.Atoi(animeTreeV.SelectElement("my_rewatch_value").InnerText())
 		myRewatchingEp, _ := strconv.Atoi(animeTreeV.SelectElement("my_rewatching_ep").InnerText())
 
-		a := Anime{
+		a := models.Anime{
 			SeriesTitle:       seriesTitle,
 			SeriesType:        seriesType,
 			SeriesAnimeDbId:   seriesAnimeDbId,

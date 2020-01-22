@@ -1,8 +1,9 @@
 package main
 
 import (
-	"./path"
-	"./storage"
+	"mal-sqlite-migrate/models"
+	"mal-sqlite-migrate/storage"
+	"mal-sqlite-migrate/parsers"
 	"database/sql"
 	"flag"
 	"fmt"
@@ -18,13 +19,13 @@ func migrate(db *sql.DB, xml string) {
     }
     defer tx.Commit()
 
-	user := path.GetUser(xml)
-	user_id := storage.AddUser(tx, user)
+	user := parsers.ParseUser(xml)
+	user_id := models.AddUser(tx, user)
 
-	animeList := path.GetAnimeList(xml)
+	animeList := parsers.ParseAnimeList(xml)
 
 	for _, anime := range animeList {
-		storage.AddSeries(tx, &anime)
+		models.AddSeries(tx, &anime)
 	}
 
 	fmt.Printf("sqliteId: %d\n", user_id)
