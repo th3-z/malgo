@@ -1,7 +1,7 @@
 package models
 
 import(
-    "github.com/th3-z/mal-sqlite-migrate/storage"
+    "github.com/th3-z/malgo/storage"
 )
 
 type SeriesType struct {

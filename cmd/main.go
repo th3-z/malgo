@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/th3-z/mal-sqlite-migrate/storage"
+	"github.com/th3-z/malgo"
+	"github.com/th3-z/malgo/storage"
 	"flag"
 	"fmt"
 )
@@ -22,7 +23,7 @@ func main() {
 	defer db.Close()
 
 	storage.CreateSchema(db)
-	storage.MigrateFile(db, inputFilename)
+	malgo.MigrateFile(db, inputFilename)
 
 	fmt.Printf("\nMigration complete!\n")
 }

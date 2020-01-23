@@ -1,8 +1,8 @@
-package storage
+package malgo
 
 import (
-    "github.com/th3-z/mal-sqlite-migrate/utils"
-    "github.com/th3-z/mal-sqlite-migrate/parsers"
+    "github.com/th3-z/malgo/utils"
+    "github.com/th3-z/malgo/parsers"
     "database/sql"
 )
 

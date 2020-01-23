@@ -1,4 +1,4 @@
-module github.com/th3-z/mal-sqlite-migrate
+module github.com/th3-z/malgo
 
 go 1.13
 
