@@ -2,7 +2,6 @@ package parsers
 
 import (
 	"github.com/antchfx/xmlquery"
-	_ "github.com/antchfx/xpath"
 	"strconv"
 	"strings"
 )

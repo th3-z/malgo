@@ -2,7 +2,7 @@ package malgo
 
 import (
 	"github.com/th3-z/malgo/storage"
-    "testing"
+	"testing"
 )
 
 func TestMigrateFile(t *testing.T) {

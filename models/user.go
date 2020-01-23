@@ -22,8 +22,8 @@ func AddUser(db storage.Queryer, user *User) int64 {
         VALUES (?)
     `
 
-	insert_id := storage.PreparedExec(db, query, user.UserName)
-	return insert_id
+	insertId := storage.PreparedExec(db, query, user.UserName)
+	return insertId
 }
 
 func AddUserAnime(db storage.Queryer, user *User, seriesId int64) int64 {
@@ -49,6 +49,6 @@ func SetUserAnimeUserStatus(db storage.Queryer, user *User, anime *Anime, userSt
             AND user_id = ?
     `
 
-    return storage.PreparedExec(db, userStatusId, anime.SeriesId, user.UserId)
+    return storage.PreparedExec(db, query, userStatusId, anime.SeriesId, user.UserId)
 }
 
