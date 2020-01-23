@@ -29,7 +29,7 @@ func InitDB(filepath string) *sql.DB {
 }
 
 func CreateSchema(db Queryer) {
-	query := schema  // storage/schema.go
+	query := Schema  // storage/schema.go
 	_, err := db.Exec(query)
 
 	if err != nil {

@@ -5,11 +5,21 @@ import (
 	_ "github.com/antchfx/xpath"
 	"strconv"
 	"strings"
-    "mal-sqlite-migrate/models"
 )
 
+type UserXml struct {
+    UserId               int  // Unused
+    UserName             int
+    UserExportType       int  // Unused
+    UserTotalAnime       int  // Unused
+    UserTotalWatching    int  // Unused
+    UserTotalCompleted   int  // Unused
+    UserTotalOnhold      int  // Unused
+    UserTotalDropped     int  // Unused
+    UserTotalPlantowatch int  // Unused
+}
 
-func ParseUser(xml string) *models.User {
+func ParseUserXml(xml string) *UserXml {
 	doc, err := xmlquery.Parse(strings.NewReader(xml))
 	if err != nil {
 		panic(err)
@@ -22,15 +32,14 @@ func ParseUser(xml string) *models.User {
 		panic(err)
 	}
 
-	UserId, _ := strconv.Atoi(userTree.SelectElement("user_id").InnerText())
-	UserExportType, _ := strconv.Atoi(userTree.SelectElement("user_export_type").InnerText())
+	userId, _ := strconv.Atoi(userTree.SelectElement("user_id").InnerText())
+	userName, _ := strconv.Atoi(userTree.SelectElement("user_name").InnerText())
 
-	u := models.User{
-		UserName:       userTree.SelectElement("user_name").InnerText(),
-		UserId:         UserId,
-		UserExportType: UserExportType,
-	}
+    userXml := UserXml {
+        UserId: userId,
+        UserName: userName,
+    }
 
-	return &u
+    return &userXml
 }
 

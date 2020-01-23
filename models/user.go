@@ -1,7 +1,7 @@
 package models
 
 import(
-    "mal-sqlite-migrate/storage"
+    "github.com/th3-z/mal-sqlite-migrate/storage"
 )
 
 type User struct {
@@ -26,9 +26,7 @@ func AddUser(db storage.Queryer, user *User) int64 {
 	return insert_id
 }
 
-
-
-func AddUserAnime(db storage.Queryer, userId int64, seriesId int64) int64 {
+func AddUserAnime(db storage.Queryer, user *User, seriesId int64) int64 {
 	query := `
         INSERT INTO user_series (
             user_id,
@@ -39,6 +37,18 @@ func AddUserAnime(db storage.Queryer, userId int64, seriesId int64) int64 {
         )
     `
 
-	return storage.PreparedExec(db, query, userId, seriesId)
+	return storage.PreparedExec(db, query, User.UserId, seriesId)
+}
+
+func SetUserAnimeUserStatus(db storage.Queryer, user *User, anime *Anime, userStatusId int64) int64 {
+    query := `
+        UPDATE user_series SET
+            user_status_id = ?
+        WHERE
+            user_series_id = ?
+            AND user_id = ?
+    `
+
+    return storage.PreparedExec(db, userStatusId, anime.SeriesId, user.UserId)
 }
 

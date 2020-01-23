@@ -1,4 +1,4 @@
-module mal-sqlite-migrate
+module github.com/th3-z/mal-sqlite-migrate
 
 go 1.13
 

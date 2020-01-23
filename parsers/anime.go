@@ -5,11 +5,33 @@ import (
 	_ "github.com/antchfx/xpath"
 	"strconv"
 	"strings"
-    "mal-sqlite-migrate/models"
 )
 
-func ParseAnimeList(xml string) []models.Anime {
-	animeList := make([]models.Anime, 0, 0)
+type AnimeXml struct {
+	SeriesAnimedbId   int
+	SeriesTitle       string
+	SeriesType        string
+	SeriesEpisodes    int
+	MyId              int     // Unused
+	MyWatchedEpisodes int
+	MyStartDate       int
+	MyFinishDate      int
+	MyRated           int     // Unused
+	MyScore           int
+	MyDvd             string  // Unused
+    MyStorage         string
+	MyStatus          string
+	MyComments        string
+	MyTimesWatched    int
+	MyRewatchValue    int
+	MyTags            string
+	MyRewatching      int
+	MyRewatchingEp    int
+	UpdateOnImport    int     // Unused
+}
+
+func ParseAnimeXml(xml string) *[]AnimeXml {
+	animeXml := make([]AnimeXml, 0, 0)
 
 	doc, err := xmlquery.Parse(strings.NewReader(xml))
 	if err != nil {
@@ -30,7 +52,7 @@ func ParseAnimeList(xml string) []models.Anime {
 		myStatus := animeTreeV.SelectElement("my_status").InnerText()
 		myComments := animeTreeV.SelectElement("my_comments").InnerText()
 		myTags := animeTreeV.SelectElement("my_tags").InnerText()
-		seriesAnimeDbId, _ := strconv.Atoi(animeTreeV.SelectElement("series_animedb_id").InnerText())
+		seriesAnimedbId, _ := strconv.Atoi(animeTreeV.SelectElement("series_animedb_id").InnerText())
 		seriesEpisodes, _ := strconv.Atoi(animeTreeV.SelectElement("series_episodes").InnerText())
 		myWatchedEpisodes, _ := strconv.Atoi(animeTreeV.SelectElement("my_watched_episodes").InnerText())
 		myStartDate, _ := strconv.Atoi(animeTreeV.SelectElement("my_start_date").InnerText())
@@ -40,10 +62,10 @@ func ParseAnimeList(xml string) []models.Anime {
 		myRewatchValue, _ := strconv.Atoi(animeTreeV.SelectElement("my_rewatch_value").InnerText())
 		myRewatchingEp, _ := strconv.Atoi(animeTreeV.SelectElement("my_rewatching_ep").InnerText())
 
-		a := models.Anime{
+		a := AnimeXml{
 			SeriesTitle:       seriesTitle,
 			SeriesType:        seriesType,
-			SeriesAnimeDbId:   seriesAnimeDbId,
+			SeriesAnimedbId:   seriesAnimedbId,
 			SeriesEpisodes:    seriesEpisodes,
 			MyWatchedEpisodes: myWatchedEpisodes,
 			MyStartDate:       myStartDate,
@@ -57,8 +79,9 @@ func ParseAnimeList(xml string) []models.Anime {
 			MyRewatchValue:    myRewatchValue,
 			MyRewatchingEp:    myRewatchingEp,
 		}
-		animeList = append(animeList, a)
+		animeXml = append(animeXml, a)
 	}
 
-	return animeList
+	return &animeXml
 }
+

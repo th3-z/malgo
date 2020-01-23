@@ -1,21 +1,21 @@
 package models
 
 import(
-    "fmt"
-    "mal-sqlite-migrate/storage"
+    "github.com/th3-z/mal-sqlite-migrate/storage"
 )
 
 type Anime struct {
+	SeriesId       int
 	SeriesTitle       string
 	SeriesAnimeDbId   int
-	SeriesType        string
+	SeriesType        SeriesType
 	SeriesEpisodes    int
 	MyWatchedEpisodes int
 	MyStartDate       int
 	MyFinishDate      int
 	MyScore           int
-	MyStorage         string
-	MyStatus          string
+    MyStorage         int  // TODO: Storage model
+	MyStatus          UserStatus
 	MyComments        string
 	MyTimesWatched    int
 	MyRewatchValue    int
@@ -30,8 +30,7 @@ type Anime struct {
 }
 
 func AddSeries(db storage.Queryer, anime *Anime) int64 {
-    print("w")
-    seriesTypeId := AddSeriesType(db, anime.SeriesType)
+    seriesTypeId := AddSeriesType(db, anime.SeriesType.SeriesTypeId)
 
 	query := `
         INSERT INTO series (
@@ -47,8 +46,6 @@ func AddSeries(db storage.Queryer, anime *Anime) int64 {
         )
     `
 
-    fmt.Printf("Type - %s, TypeId- %d\n", anime.SeriesType, seriesTypeId)
-
 	return storage.PreparedExec(
         db, query,
         anime.SeriesTitle,
@@ -58,40 +55,37 @@ func AddSeries(db storage.Queryer, anime *Anime) int64 {
     )
 }
 
-func AddSeriesType(db storage.Queryer, seriesType string) int64 {
-    var seriesId int64
+func GetAnimeList(db storage.Queryer) []Anime {
+    var animeList []Anime
+
     query := `
-        SELECT
-            series_type_id
-         FROM
-            series_type
-        WHERE
-            name = ?
+        SELECT 
+            name,
+            animedb_id,
+            episodes
+        FROM series
     `
-    err := storage.PreparedQueryRow(
+    rows := storage.PreparedQuery(
         db, query,
-        seriesType,
-    ).Scan(&seriesId)
+    )
+    defer rows.Close()
 
-    if err != nil {
-        query = `
-            INSERT OR IGNORE INTO series_type (
-                name
-            ) VALUES (
-                ?
-            )
-        `
-
-        seriesId = storage.PreparedExec(
-            db, query,
-            seriesType,
+    for rows.Next() {
+        var anime Anime
+        err := rows.Scan(
+            &anime.SeriesTitle, &anime.SeriesAnimeDbId, &anime.SeriesEpisodes,
         )
+        if err != nil {
+            panic(err)
+        }
+
+        animeList = append(animeList, anime)
     }
 
-    return seriesId
+    return animeList
 }
 
-func SetSeriesType(db storage.Queryer, seriesId int64, seriesTypeId int64) int64 {
+func SetSeriesType(db storage.Queryer, anime *Anime, seriesTypeId int64) int64 {
     query := `
         UPDATE series SET
             series_type_id = ?
@@ -102,21 +96,7 @@ func SetSeriesType(db storage.Queryer, seriesId int64, seriesTypeId int64) int64
     return storage.PreparedExec(
         db, query,
         seriesTypeId,
-        seriesId,
+        anime.SeriesId,
     )
 }
 
-func SetSeriesStatus(db storage.Queryer, seriesId int64, seriesStatusId int64) int64 {
-    query := `
-        UPDATE series SET
-            series_status_id = ?
-        WHERE
-            series_id = ?
-    `
-
-    return storage.PreparedExec(
-        db, query,
-        seriesStatusId,
-        seriesId,
-    )
-}

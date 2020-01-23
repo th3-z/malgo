@@ -1,7 +1,7 @@
 package storage
 
 const (
-	schema = `
+	Schema = `
         CREATE TABLE user( -- Users didn't need to be included but I want the flexibility
             user_id INTEGER PRIMARY KEY NOT NULL,
             name VARCHAR(255) UNIQUE
