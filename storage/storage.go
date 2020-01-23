@@ -2,18 +2,16 @@ package storage
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"  // sqlite3 driver used in InitDB
+	_ "github.com/mattn/go-sqlite3" // sqlite3 driver used in InitDB
 	"os"
 )
 
-
 type Queryer interface {
-    Query(string, ...interface{}) (*sql.Rows, error)
-    QueryRow(string, ...interface{}) *sql.Row
-    Prepare(string) (*sql.Stmt, error)
-    Exec(string, ...interface{}) (sql.Result, error)
+	Query(string, ...interface{}) (*sql.Rows, error)
+	QueryRow(string, ...interface{}) *sql.Row
+	Prepare(string) (*sql.Stmt, error)
+	Exec(string, ...interface{}) (sql.Result, error)
 }
-
 
 func InitDB(filepath string) *sql.DB {
 	if _, err := os.Stat(filepath); err == nil {
@@ -29,7 +27,7 @@ func InitDB(filepath string) *sql.DB {
 }
 
 func CreateSchema(db Queryer) {
-	query := Schema  // storage/schema.go
+	query := Schema // storage/schema.go
 	_, err := db.Exec(query)
 
 	if err != nil {
@@ -72,9 +70,8 @@ func PreparedQuery(db Queryer, query string, args ...interface{}) *sql.Rows {
 		panic(err)
 	}
 
-    return rows
+	return rows
 }
-
 
 func PreparedQueryRow(db Queryer, query string, args ...interface{}) *sql.Row {
 	stmt, err := db.Prepare(query)

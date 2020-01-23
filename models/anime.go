@@ -1,11 +1,11 @@
 package models
 
-import(
-    "github.com/th3-z/malgo/storage"
+import (
+	"github.com/th3-z/malgo/storage"
 )
 
 type Anime struct {
-	SeriesId       int
+	SeriesId          int
 	SeriesTitle       string
 	SeriesAnimeDbId   int
 	SeriesType        SeriesType
@@ -14,7 +14,7 @@ type Anime struct {
 	MyStartDate       int
 	MyFinishDate      int
 	MyScore           int
-    MyStorage         int  // TODO: Storage model
+	MyStorage         int // TODO: Storage model
 	MyStatus          UserStatus
 	MyComments        string
 	MyTimesWatched    int
@@ -30,7 +30,7 @@ type Anime struct {
 }
 
 func AddSeries(db storage.Queryer, anime *Anime) int64 {
-    seriesTypeId := AddSeriesType(db, anime.SeriesType.SeriesTypeId)
+	seriesTypeId := AddSeriesType(db, anime.SeriesType.SeriesTypeId)
 
 	query := `
         INSERT INTO series (
@@ -47,56 +47,55 @@ func AddSeries(db storage.Queryer, anime *Anime) int64 {
     `
 
 	return storage.PreparedExec(
-        db, query,
-        anime.SeriesTitle,
-        anime.SeriesAnimeDbId,
-        anime.SeriesEpisodes,
-        seriesTypeId,
-    )
+		db, query,
+		anime.SeriesTitle,
+		anime.SeriesAnimeDbId,
+		anime.SeriesEpisodes,
+		seriesTypeId,
+	)
 }
 
 func GetAnimeList(db storage.Queryer) []Anime {
-    var animeList []Anime
+	var animeList []Anime
 
-    query := `
+	query := `
         SELECT 
             name,
             animedb_id,
             episodes
         FROM series
     `
-    rows := storage.PreparedQuery(
-        db, query,
-    )
-    defer rows.Close()
+	rows := storage.PreparedQuery(
+		db, query,
+	)
+	defer rows.Close()
 
-    for rows.Next() {
-        var anime Anime
-        err := rows.Scan(
-            &anime.SeriesTitle, &anime.SeriesAnimeDbId, &anime.SeriesEpisodes,
-        )
-        if err != nil {
-            panic(err)
-        }
+	for rows.Next() {
+		var anime Anime
+		err := rows.Scan(
+			&anime.SeriesTitle, &anime.SeriesAnimeDbId, &anime.SeriesEpisodes,
+		)
+		if err != nil {
+			panic(err)
+		}
 
-        animeList = append(animeList, anime)
-    }
+		animeList = append(animeList, anime)
+	}
 
-    return animeList
+	return animeList
 }
 
 func SetSeriesType(db storage.Queryer, anime *Anime, seriesTypeId int64) int64 {
-    query := `
+	query := `
         UPDATE series SET
             series_type_id = ?
         WHERE
             series_id = ?
     `
 
-    return storage.PreparedExec(
-        db, query,
-        seriesTypeId,
-        anime.SeriesId,
-    )
+	return storage.PreparedExec(
+		db, query,
+		seriesTypeId,
+		anime.SeriesId,
+	)
 }
-

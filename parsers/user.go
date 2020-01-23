@@ -7,15 +7,15 @@ import (
 )
 
 type UserXml struct {
-    UserId               int  // Unused
-    UserName             int
-    UserExportType       int  // Unused
-    UserTotalAnime       int  // Unused
-    UserTotalWatching    int  // Unused
-    UserTotalCompleted   int  // Unused
-    UserTotalOnhold      int  // Unused
-    UserTotalDropped     int  // Unused
-    UserTotalPlantowatch int  // Unused
+	UserId               int // Unused
+	UserName             int
+	UserExportType       int // Unused
+	UserTotalAnime       int // Unused
+	UserTotalWatching    int // Unused
+	UserTotalCompleted   int // Unused
+	UserTotalOnhold      int // Unused
+	UserTotalDropped     int // Unused
+	UserTotalPlantowatch int // Unused
 }
 
 func ParseUserXml(xml string) *UserXml {
@@ -34,11 +34,10 @@ func ParseUserXml(xml string) *UserXml {
 	userId, _ := strconv.Atoi(userTree.SelectElement("user_id").InnerText())
 	userName, _ := strconv.Atoi(userTree.SelectElement("user_name").InnerText())
 
-    userXml := UserXml {
-        UserId: userId,
-        UserName: userName,
-    }
+	userXml := UserXml{
+		UserId:   userId,
+		UserName: userName,
+	}
 
-    return &userXml
+	return &userXml
 }
-

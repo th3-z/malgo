@@ -1,7 +1,7 @@
 package models
 
-import(
-    "github.com/th3-z/malgo/storage"
+import (
+	"github.com/th3-z/malgo/storage"
 )
 
 type User struct {
@@ -41,7 +41,7 @@ func AddUserAnime(db storage.Queryer, user *User, seriesId int64) int64 {
 }
 
 func SetUserAnimeUserStatus(db storage.Queryer, user *User, anime *Anime, userStatusId int64) int64 {
-    query := `
+	query := `
         UPDATE user_series SET
             user_status_id = ?
         WHERE
@@ -49,6 +49,5 @@ func SetUserAnimeUserStatus(db storage.Queryer, user *User, anime *Anime, userSt
             AND user_id = ?
     `
 
-    return storage.PreparedExec(db, query, userStatusId, anime.SeriesId, user.UserId)
+	return storage.PreparedExec(db, query, userStatusId, anime.SeriesId, user.UserId)
 }
-

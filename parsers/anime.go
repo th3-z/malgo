@@ -11,14 +11,14 @@ type AnimeXml struct {
 	SeriesTitle       string
 	SeriesType        string
 	SeriesEpisodes    int
-	MyId              int     // Unused
+	MyId              int // Unused
 	MyWatchedEpisodes int
 	MyStartDate       int
 	MyFinishDate      int
-	MyRated           int     // Unused
+	MyRated           int // Unused
 	MyScore           int
-	MyDvd             string  // Unused
-    MyStorage         string
+	MyDvd             string // Unused
+	MyStorage         string
 	MyStatus          string
 	MyComments        string
 	MyTimesWatched    int
@@ -26,7 +26,7 @@ type AnimeXml struct {
 	MyTags            string
 	MyRewatching      int
 	MyRewatchingEp    int
-	UpdateOnImport    int     // Unused
+	UpdateOnImport    int // Unused
 }
 
 func ParseAnimeXml(xml string) *[]AnimeXml {
@@ -83,4 +83,3 @@ func ParseAnimeXml(xml string) *[]AnimeXml {
 
 	return &animeXml
 }
-

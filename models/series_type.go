@@ -1,17 +1,17 @@
 package models
 
-import(
-    "github.com/th3-z/malgo/storage"
+import (
+	"github.com/th3-z/malgo/storage"
 )
 
 type SeriesType struct {
-    SeriesTypeId int
-    Name string
+	SeriesTypeId int
+	Name         string
 }
 
 func AddSeriesType(db storage.Queryer, seriesType string) int64 {
-    var seriesId int64
-    query := `
+	var seriesId int64
+	query := `
         SELECT
             series_type_id
          FROM
@@ -19,13 +19,13 @@ func AddSeriesType(db storage.Queryer, seriesType string) int64 {
         WHERE
             name = ?
     `
-    err := storage.PreparedQueryRow(
-        db, query,
-        seriesType,
-    ).Scan(&seriesId)
+	err := storage.PreparedQueryRow(
+		db, query,
+		seriesType,
+	).Scan(&seriesId)
 
-    if err != nil {
-        query = `
+	if err != nil {
+		query = `
             INSERT OR IGNORE INTO series_type (
                 name
             ) VALUES (
@@ -33,12 +33,11 @@ func AddSeriesType(db storage.Queryer, seriesType string) int64 {
             )
         `
 
-        seriesId = storage.PreparedExec(
-            db, query,
-            seriesType,
-        )
-    }
+		seriesId = storage.PreparedExec(
+			db, query,
+			seriesType,
+		)
+	}
 
-    return seriesId
+	return seriesId
 }
-

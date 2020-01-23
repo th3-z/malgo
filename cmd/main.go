@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/th3-z/malgo"
-	"github.com/th3-z/malgo/storage"
 	"flag"
 	"fmt"
+	"github.com/th3-z/malgo"
+	"github.com/th3-z/malgo/storage"
 )
 
 func main() {
