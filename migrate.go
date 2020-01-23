@@ -1,13 +1,18 @@
 package malgo
 
 import (
-    "github.com/th3-z/malgo/utils"
     "github.com/th3-z/malgo/parsers"
     "database/sql"
+    "io/ioutil"
 )
 
 func MigrateFile(db *sql.DB, filename string) {
-    MigrateString(db, utils.FileToStr(filename))
+    xmlBytes, err := ioutil.ReadFile(filename)
+    if err != nil {
+        panic(err)
+    }
+
+    MigrateString(db, string(xmlBytes))
 }
 
 func MigrateString(db *sql.DB, xml string) {
