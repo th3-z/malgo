@@ -1,5 +1,8 @@
 # Malgo
-[![Build Status](https://travis-ci.com/th3-z/malgo.svg?branch=master)](https://travis-ci.com/th3-z/malgo) [![Go Report Card](https://goreportcard.com/badge/github.com/th3-z/malgo)](https://goreportcard.com/report/github.com/th3-z/malgo)
+[![Build Status](https://travis-ci.com/th3-z/malgo.svg?branch=master)](https://travis-ci.com/th3-z/malgo) [![Go Report Card](https://goreportcard.com/badge/github.com/th3-z/malgo)](https://goreportcard.com/report/github.com/th3-z/malgo) [![GitHub license](https://img.shields.io/github/license/th3-z/malgo)](https://github.com/th3-z/malgo/blob/master/LICENSE) [![Codecov](https://img.shields.io/codecov/c/github/th3-z/malgo.svg?style=flat)](https://codecov.io/gh/th3-z/malgo)
+
+
+
 
 A WIP MyAnimeList SQL migration utility and go library.
 
