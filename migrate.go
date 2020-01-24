@@ -33,6 +33,7 @@ func MigrateString(db *sql.DB, xml string) {
         series := models.NewSeries(db, animeXml.SeriesTitle)
         series.AnimedbId = animeXml.SeriesAnimedbId
         series.Episodes = animeXml.SeriesEpisodes
+        series.Type = models.NewSeriesType(db, animeXml.SeriesType)
 
         review := models.NewReview(db, user.Id, series.Id)
         review.WatchedEpisodes = animeXml.MyWatchedEpisodes

@@ -8,7 +8,7 @@ type Series struct {
 	Id          int64
 	Title       string
 	AnimedbId   int
-	Type        SeriesType
+	Type        *SeriesType
 	Episodes    int
 }
 
@@ -53,6 +53,7 @@ func GetSeries(db storage.Queryer, seriesId int64) *Series {
     )
 
     if seriesTypeId != 0 {
+        series.Type = GetSeriesType(db, seriesTypeId)
         return &series
     }
 

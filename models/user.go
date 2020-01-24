@@ -7,6 +7,7 @@ import (
 type User struct {
 	Id               int64
 	Name             string
+    Reviews []*Review
 }
 
 func NewUser(db storage.Queryer, name string) *User {

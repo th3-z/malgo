@@ -5,39 +5,41 @@ import (
 )
 
 type SeriesType struct {
-	SeriesTypeId int
+	Id int
 	Name         string
 }
 
-func AddSeriesType(db storage.Queryer, seriesType string) int64 {
-	var seriesId int64
+func NewSeriesType(db storage.Queryer, seriesType string) *SeriesType {
+    query := `
+        INSERT OR IGNORE INTO series_type (
+            name
+        ) VALUES (
+            ?
+        )
+    `
+
+    seriesTypeId := storage.PreparedExec(
+		db, query, seriesType,
+	)
+    print(seriesTypeId)
+    return GetSeriesType(db, seriesTypeId)
+}
+
+func GetSeriesType(db storage.Queryer, seriesTypeId int64) *SeriesType {
 	query := `
         SELECT
-            series_type_id
+            series_type_id, name
          FROM
             series_type
         WHERE
-            name = ?
+            series_type_id = ?
     `
-	err := storage.PreparedQueryRow(
-		db, query,
-		seriesType,
-	).Scan(&seriesId)
+	row := storage.PreparedQueryRow(
+		db, query, seriesTypeId,
+    )
+    var seriesType SeriesType
+    row.Scan(&seriesType.Id, &seriesType.Name)
 
-	if err != nil {
-		query = `
-            INSERT OR IGNORE INTO series_type (
-                name
-            ) VALUES (
-                ?
-            )
-        `
-
-		seriesId = storage.PreparedExec(
-			db, query,
-			seriesType,
-		)
-	}
-
-	return seriesId
+    return &seriesType
 }
+
