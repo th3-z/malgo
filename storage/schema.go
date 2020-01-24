@@ -28,10 +28,13 @@ const (
             finish_date INTEGER,
             rated INTEGER,
             score INTEGER,
+            dvd INTEGER,
+            tags TEXT,
             comments TEXT,
             times_watched INTEGER,
+            rewatching INTEGER,
             rewatch_value INTEGER,
-            rewatched_episodes INTEGER,	
+            rewatching_ep INTEGER,	
             
             UNIQUE(user_id, series_id)
         );

@@ -8,7 +8,7 @@ import (
 
 type UserXml struct {
 	UserId               int // Unused
-	UserName             int
+	UserName             string
 	UserExportType       int // Unused
 	UserTotalAnime       int // Unused
 	UserTotalWatching    int // Unused
@@ -32,7 +32,7 @@ func ParseUserXml(xml string) *UserXml {
 	}
 
 	userId, _ := strconv.Atoi(userTree.SelectElement("user_id").InnerText())
-	userName, _ := strconv.Atoi(userTree.SelectElement("user_name").InnerText())
+	userName := userTree.SelectElement("user_name").InnerText()
 
 	userXml := UserXml{
 		UserId:   userId,

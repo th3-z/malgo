@@ -5,49 +5,39 @@ import (
 )
 
 type User struct {
-	UserId               int
-	UserName             string
-	UserExportType       int // Unused
-	UserTotalAnime       int // Unused
-	UserTotalWatching    int // Unused
-	UserTotalCompleted   int // Unused
-	UserTotalOnHold      int // Unused
-	UserTotalDropped     int // Unused
-	UserTotalPlanToWatch int // Unused
+	Id               int64
+	Name             string
 }
 
-func AddUser(db storage.Queryer, user *User) int64 {
+func NewUser(db storage.Queryer, name string) *User {
 	query := `
         INSERT INTO user (name)
         VALUES (?)
     `
 
-	insertId := storage.PreparedExec(db, query, user.UserName)
-	return insertId
+	userId := storage.PreparedExec(db, query, name)
+	return GetUser(db, userId)
 }
 
-func AddUserAnime(db storage.Queryer, user *User, seriesId int64) int64 {
-	query := `
-        INSERT INTO user_series (
+func GetUser(db storage.Queryer, userId int64) *User {
+    query := `
+        SELECT
             user_id,
-            series_id
-        ) VALUES (
-            ?,
-            ?
-        )
-    `
-
-	return storage.PreparedExec(db, query, User.UserId, seriesId)
-}
-
-func SetUserAnimeUserStatus(db storage.Queryer, user *User, anime *Anime, userStatusId int64) int64 {
-	query := `
-        UPDATE user_series SET
-            user_status_id = ?
+            name
+        FROM
+            user
         WHERE
-            user_series_id = ?
-            AND user_id = ?
+            user_id = ?
     `
 
-	return storage.PreparedExec(db, query, userStatusId, anime.SeriesId, user.UserId)
+    row := storage.PreparedQueryRow(
+        db, query, userId,
+    )
+    var user User
+    row.Scan(
+        &user.Id, &user.Name,
+    )
+
+    return &user
 }
+
