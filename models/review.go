@@ -2,14 +2,15 @@ package models
 
 import (
 	"github.com/th3-z/malgo/storage"
+	"time"
 )
 
 type Review struct {
 	Id               int64
 	Series           *Series
     WatchedEpisodes int
-    StartDate int
-    FinishDate int
+    StartDate *time.Time
+    FinishDate *time.Time
     Rated int
     Score int
     Dvd int
