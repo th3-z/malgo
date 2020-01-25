@@ -31,32 +31,28 @@ func MigrateString(db *sql.DB, xml string) {
 
 	for _, animeXml := range *malXml.AnimeXml {
         series := models.NewSeries(db, animeXml.SeriesTitle)
+		series.Type = models.NewSeriesType(db, animeXml.SeriesType)
         series.AnimedbId = animeXml.SeriesAnimedbId
         series.Episodes = animeXml.SeriesEpisodes
-        series.Type = models.NewSeriesType(db, animeXml.SeriesType)
 
         review := models.NewReview(db, user.Id, series.Id)
+        review.Status = models.NewUserStatus(db, animeXml.MyStatus)
         review.WatchedEpisodes = animeXml.MyWatchedEpisodes
-        review.StartDate = animeXml.MyStartDate
-        review.FinishDate = animeXml.MyFinishDate
+        // review.StartDate = animeXml.MyStartDate TODO
+        // review.FinishDate = animeXml.MyFinishDate TODO
         review.Rated = animeXml.MyRated
         review.Score = animeXml.MyScore
-        // review.Dvd = animeXml.MyDvd
-        review.Storage = animeXml.MyStorage
-        review.Status = animeXml.MyStatus
+        review.Dvd = animeXml.MyDvd
+        review.Storage = models.NewStorageType(db, animeXml.MyStorage)
         review.Comments = animeXml.MyComments
         review.TimesWatched = animeXml.MyTimesWatched
-        review.RewatchValue = animeXml.MyRewatchValue
+        review.RewatchValue = models.NewRewatchValue(db, animeXml.MyRewatchValue)
         review.Tags = animeXml.MyTags
         review.Rewatching = animeXml.MyRewatching
         review.RewatchingEp = animeXml.MyRewatchingEp
 
         user.Reviews = append(user.Reviews, review)
 
-		// models.AddSeries(tx, &anime)
-		// models.AddUserAnime(tx, &user, anime.SeriesId)
-		// statusId := models.AddUserStatus(tx, &user, anime.SeriesStatus)
-		// models.SetAnimeUserStatus(tx, &user, &anime, statusId)
+        print(series.Title)
 	}
 }
-

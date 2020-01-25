@@ -12,12 +12,12 @@ type Review struct {
     FinishDate int
     Rated int
     Score int
-    Dvd int  // Unused
-    Storage string  // TODO: storage type
-    Status string  // TODO: status type
+    Dvd int
+    Storage *StorageType
+    Status *ReviewStatus
     Comments string
     TimesWatched int
-    RewatchValue int
+    RewatchValue *RewatchValue
     Tags string
     Rewatching int
     RewatchingEp int
@@ -25,7 +25,7 @@ type Review struct {
 
 func NewReview(db storage.Queryer, userId int64, seriesId int64) *Review {
 	query := `
-        INSERT INTO user_series(
+        INSERT INTO review(
             user_id,
             series_id
         ) VALUES (?, ?)
@@ -40,7 +40,7 @@ func NewReview(db storage.Queryer, userId int64, seriesId int64) *Review {
 func GetReview(db storage.Queryer, userId int64, seriesId int64) *Review {
     query := `
         SELECT
-            user_series_id,
+            review_id,
             watched_episodes,
             start_date,
             finish_date,
@@ -56,7 +56,7 @@ func GetReview(db storage.Queryer, userId int64, seriesId int64) *Review {
             rewatching,
             rewatching_ep
         FROM
-            user_series
+            review
         WHERE
             user_id = ?
             AND series_id = ?

@@ -1,5 +1,6 @@
 # Editors
 *.swp
+.idea/
 
 # Output
 *.sqlite

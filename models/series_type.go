@@ -21,7 +21,6 @@ func NewSeriesType(db storage.Queryer, seriesType string) *SeriesType {
     seriesTypeId := storage.PreparedExec(
 		db, query, seriesType,
 	)
-    print(seriesTypeId)
     return GetSeriesType(db, seriesTypeId)
 }
 

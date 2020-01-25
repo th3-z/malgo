@@ -7,15 +7,15 @@ import (
 )
 
 type UserXml struct {
-	UserId               int // Unused
+	UserId               int
 	UserName             string
-	UserExportType       int // Unused
-	UserTotalAnime       int // Unused
-	UserTotalWatching    int // Unused
-	UserTotalCompleted   int // Unused
-	UserTotalOnhold      int // Unused
-	UserTotalDropped     int // Unused
-	UserTotalPlantowatch int // Unused
+	// <user_export_type> ignored
+	// <user_total_anime> ignored
+	// <user_total_watching> ignored
+	// <user_total_completed> ignored
+	// <user_total_onhold> ignored
+	// <user_total_dropped> ignored
+	// <user_total_plantowatch> ignored
 }
 
 func ParseUserXml(xml string) *UserXml {
@@ -25,11 +25,7 @@ func ParseUserXml(xml string) *UserXml {
 	}
 
 	userPath := "//myinfo"
-
 	userTree := xmlquery.FindOne(doc, userPath)
-	if err != nil {
-		panic(err)
-	}
 
 	userId, _ := strconv.Atoi(userTree.SelectElement("user_id").InnerText())
 	userName := userTree.SelectElement("user_name").InnerText()
