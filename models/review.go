@@ -55,7 +55,7 @@ func GetReview(db storage.Queryer, userId int64, seriesId int64) *Review {
             user_status_id,
             comments,
             times_watched,
-            rewatch_value,
+            rewatch_value_id,
             tags,
             rewatching,
             rewatching_ep
@@ -70,17 +70,52 @@ func GetReview(db storage.Queryer, userId int64, seriesId int64) *Review {
         db, query, userId, seriesId,
     )
     var review Review
-    var storageTypeId int
-    var userStatusId int
+    var storageTypeId int64
+    var userStatusId int64
+    var rewatchValueId int64
 
     row.Scan(
         &review.Id, &review.WatchedEpisodes, &review.StartDate,
         &review.FinishDate, &review.Rated, &review.Score, &review.Dvd,
         &storageTypeId, &userStatusId, &review.Comments, &review.TimesWatched,
-        &review.RewatchValue, &review.Tags, &review.Rewatching, &review.RewatchingEp,
+        &rewatchValueId, &review.Tags, &review.Rewatching, &review.RewatchingEp,
     )
 
-    review.Series = GetSeries(db, seriesId)
+    if seriesId != 0 {
+        review.Series = GetSeries(db, seriesId)
+    }
+    if storageTypeId != 0 {
+        review.Storage = GetStorageType(db, storageTypeId)
+    }
+    if userStatusId != 0 {
+        review.Status = GetUserStatus(db, userStatusId)
+    }
+    if rewatchValueId != 0 {
+        review.RewatchValue = GetRewatchValue(db, rewatchValueId)
+    }
 
     return &review
+}
+
+func getUserReviews(db storage.Queryer, userId int64) []*Review {
+    query := `
+		SELECT
+			series_id
+		FROM
+			review
+		WHERE
+			user_id = ?
+	`
+    rows := storage.PreparedQuery(db, query, userId)
+    var reviews []*Review
+    for rows.Next() {
+        var seriesId int64
+        err := rows.Scan(&seriesId)
+        if err != nil {
+            panic(err)
+        }
+        reviews = append(reviews, GetReview(db, userId, seriesId))
+    }
+
+    return reviews
 }

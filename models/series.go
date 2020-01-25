@@ -90,7 +90,6 @@ func SearchSeries(db storage.Queryer, name string) *Series {
 
 	if seriesTypeId != 0 {
 		series.Type = GetSeriesType(db, seriesTypeId)
-		return &series
 	}
 
 	return &series

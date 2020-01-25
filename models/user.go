@@ -42,6 +42,8 @@ func GetUser(db storage.Queryer, userId int64) *User {
         &user.Id, &user.Name,
     )
 
+	user.Reviews = getUserReviews(db, userId)
+
     return &user
 }
 
@@ -64,6 +66,7 @@ func SearchUser(db storage.Queryer, name string) *User {
 		&user.Id, &user.Name,
 	)
 
+	user.Reviews = getUserReviews(db, user.Id)
+
 	return &user
 }
-

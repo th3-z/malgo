@@ -28,6 +28,7 @@ const (
             series_id INTEGER NOT NULL,
             storage_type_id INTEGER,	
             user_status_id INTEGER,
+			rewatch_value_id INTEGER,
 
             watched_episodes INTEGER,
             start_date INTEGER,
@@ -39,7 +40,6 @@ const (
             tags TEXT,
             times_watched INTEGER,
             rewatching INTEGER,
-            rewatch_value INTEGER,
             rewatching_ep INTEGER,	
             
             UNIQUE(user_id, series_id)
