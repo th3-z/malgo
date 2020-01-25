@@ -31,9 +31,12 @@ func NewReview(db storage.Queryer, userId int64, seriesId int64) *Review {
         ) VALUES (?, ?)
     `
 
-	storage.PreparedExec(
+	_, err := storage.PreparedExec(
         db, query, userId, seriesId,
     )
+    if err != nil {
+        return GetReview(db, userId, seriesId)
+    }
 	return GetReview(db, userId, seriesId)
 }
 
@@ -80,4 +83,3 @@ func GetReview(db storage.Queryer, userId int64, seriesId int64) *Review {
 
     return &review
 }
-

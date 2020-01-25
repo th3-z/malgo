@@ -9,18 +9,21 @@ type ReviewStatus struct {
 	Name         string
 }
 
-func NewUserStatus(db storage.Queryer, reviewStatus string) *ReviewStatus {
+func NewUserStatus(db storage.Queryer, name string) *ReviewStatus {
 	query := `
-        INSERT OR IGNORE INTO review_status (
+        INSERT INTO review_status (
             name
         ) VALUES (
             ?
         )
     `
 
-	reviewStatusId := storage.PreparedExec(
-		db, query, reviewStatus,
+	reviewStatusId, err := storage.PreparedExec(
+		db, query, name,
 	)
+	if err != nil {
+		return SearchUserStatus(db, name)
+	}
 	return GetUserStatus(db, reviewStatusId)
 }
 
@@ -35,6 +38,24 @@ func GetUserStatus(db storage.Queryer, reviewStatusId int64) *ReviewStatus {
     `
 	row := storage.PreparedQueryRow(
 		db, query, reviewStatusId,
+	)
+	var reviewStatus ReviewStatus
+	row.Scan(&reviewStatus.Id, &reviewStatus.Name)
+
+	return &reviewStatus
+}
+
+func SearchUserStatus(db storage.Queryer, name string) *ReviewStatus {
+	query := `
+        SELECT
+            review_status_id, name
+         FROM
+            review_status
+        WHERE
+            name = ?
+    `
+	row := storage.PreparedQueryRow(
+		db, query, name,
 	)
 	var reviewStatus ReviewStatus
 	row.Scan(&reviewStatus.Id, &reviewStatus.Name)

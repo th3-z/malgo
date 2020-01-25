@@ -15,7 +15,10 @@ type Queryer interface {
 
 func InitDB(filepath string) *sql.DB {
 	if _, err := os.Stat(filepath); err == nil {
-		os.Remove(filepath)
+		err = os.Remove(filepath)
+		if err != nil {
+			panic(err)
+		}
 	}
 	db, err := sql.Open("sqlite3", filepath)
 
@@ -35,28 +38,28 @@ func CreateSchema(db Queryer) {
 	}
 }
 
-func PreparedExec(db Queryer, query string, args ...interface{}) int64 {
+func PreparedExec(db Queryer, query string, args ...interface{}) (int64, error) {
 	stmt, err := db.Prepare(query)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 
 	res, err := stmt.Exec(args...)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 
 	insertId, err := res.LastInsertId()
 	if err == nil {
-		return insertId
+		return insertId, nil
 	}
 
 	affectedRows, err := res.RowsAffected()
 	if err == nil {
-		return affectedRows
+		return affectedRows, nil
 	}
 
-	return 0
+	return 0, nil
 }
 
 func PreparedQuery(db Queryer, query string, args ...interface{}) *sql.Rows {

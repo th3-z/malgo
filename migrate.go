@@ -25,28 +25,28 @@ func MigrateString(db *sql.DB, xml string) {
 	defer tx.Commit()
 
 	malXml := parsers.ParseMalXml(xml)
-    user := models.NewUser(db, malXml.UserXml.UserName)
+    user := models.NewUser(tx, malXml.UserXml.UserName)
     print(user.Name)
 	print("\n")
 
 	for _, animeXml := range *malXml.AnimeXml {
-        series := models.NewSeries(db, animeXml.SeriesTitle)
-		series.Type = models.NewSeriesType(db, animeXml.SeriesType)
+        series := models.NewSeries(tx, animeXml.SeriesTitle)
+		series.Type = models.NewSeriesType(tx, animeXml.SeriesType)
         series.AnimedbId = animeXml.SeriesAnimedbId
         series.Episodes = animeXml.SeriesEpisodes
 
-        review := models.NewReview(db, user.Id, series.Id)
-        review.Status = models.NewUserStatus(db, animeXml.MyStatus)
+        review := models.NewReview(tx, user.Id, series.Id)
+        review.Status = models.NewUserStatus(tx, animeXml.MyStatus)
         review.WatchedEpisodes = animeXml.MyWatchedEpisodes
         // review.StartDate = animeXml.MyStartDate TODO
         // review.FinishDate = animeXml.MyFinishDate TODO
         review.Rated = animeXml.MyRated
         review.Score = animeXml.MyScore
         review.Dvd = animeXml.MyDvd
-        review.Storage = models.NewStorageType(db, animeXml.MyStorage)
+        review.Storage = models.NewStorageType(tx, animeXml.MyStorage)
         review.Comments = animeXml.MyComments
         review.TimesWatched = animeXml.MyTimesWatched
-        review.RewatchValue = models.NewRewatchValue(db, animeXml.MyRewatchValue)
+        review.RewatchValue = models.NewRewatchValue(tx, animeXml.MyRewatchValue)
         review.Tags = animeXml.MyTags
         review.Rewatching = animeXml.MyRewatching
         review.RewatchingEp = animeXml.MyRewatchingEp
@@ -54,5 +54,9 @@ func MigrateString(db *sql.DB, xml string) {
         user.Reviews = append(user.Reviews, review)
 
         print(series.Title)
+        print(" -> ")
+        print(series.Type.Id)
+
+        print("\n")
 	}
 }

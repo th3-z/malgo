@@ -9,18 +9,21 @@ type RewatchValue struct {
 	Name         string
 }
 
-func NewRewatchValue(db storage.Queryer, rewatchValue string) *RewatchValue {
+func NewRewatchValue(db storage.Queryer, name string) *RewatchValue {
 	query := `
-        INSERT OR IGNORE INTO review_rewatch_value (
+        INSERT INTO review_rewatch_value (
             name
         ) VALUES (
             ?
         )
     `
 
-	rewatchValueId := storage.PreparedExec(
-		db, query, rewatchValue,
+	rewatchValueId, err := storage.PreparedExec(
+		db, query, name,
 	)
+	if err != nil {
+		return SearchRewatchValue(db, name)
+	}
 	return GetRewatchValue(db, rewatchValueId)
 }
 
@@ -35,6 +38,24 @@ func GetRewatchValue(db storage.Queryer, rewatchValueId int64) *RewatchValue {
     `
 	row := storage.PreparedQueryRow(
 		db, query, rewatchValueId,
+	)
+	var rewatchValue RewatchValue
+	row.Scan(&rewatchValue.Id, &rewatchValue.Name)
+
+	return &rewatchValue
+}
+
+func SearchRewatchValue(db storage.Queryer, name string) *RewatchValue {
+	query := `
+        SELECT
+            review_rewatch_value_id, name
+         FROM
+            review_rewatch_value
+        WHERE
+            name = ?
+    `
+	row := storage.PreparedQueryRow(
+		db, query, name,
 	)
 	var rewatchValue RewatchValue
 	row.Scan(&rewatchValue.Id, &rewatchValue.Name)
