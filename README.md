@@ -6,8 +6,8 @@ A MyAnimeList SQL migration utility and go library.
 ## Cli exporter usage
 
 * Export your list from MyAnimeList
-* Run `go run cmd/main.go -o output.sqlite yourAnimeList.xml`
-* Receieve SQLite database `./output.sqlite`
+* Run `malgo -o anime.sqlite yourAnimeList.xml`
+* Receieve SQLite database `./anime.sqlite`
 
 ## Databases
 
@@ -30,3 +30,13 @@ for _, review := range user.Reviews {
     print("\n")
 }
 ```
+
+## Building
+
+Run `make build` to create a release for the CLI tool in `./bin`.
+
+### Requirements
+
+* Golang 1.13.x
+* make
+
