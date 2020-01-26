@@ -29,5 +29,4 @@ for _, review := range user.Reviews {
     print(review.Series.Name)
     print("\n")
 }
-
 ```
