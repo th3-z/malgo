@@ -6,6 +6,5 @@
 *.sqlite
 *.sqlite-journal
 
-# Executable
-mal-sqlite-migrate
-
+# Release binaries
+bin/
