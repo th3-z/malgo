@@ -5,11 +5,11 @@ import (
 )
 
 type Series struct {
-	Id          int64
-	Title       string
-	AnimedbId   int
-	Type        *SeriesType
-	Episodes    int
+	Id        int64
+	Name      string
+	AnimedbId int
+	Type      *SeriesType
+	Episodes  int
 }
 
 func NewSeries(db storage.Queryer, name string) *Series {
@@ -52,7 +52,7 @@ func GetSeries(db storage.Queryer, seriesId int64) *Series {
     var series Series
     var seriesTypeId int64
     row.Scan(
-        &series.Id, &series.Title, &series.AnimedbId, &series.Episodes,
+        &series.Id, &series.Name, &series.AnimedbId, &series.Episodes,
         &seriesTypeId,
     )
 
@@ -84,7 +84,7 @@ func SearchSeries(db storage.Queryer, name string) *Series {
 	var series Series
 	var seriesTypeId int64
 	row.Scan(
-		&series.Id, &series.Title, &series.AnimedbId, &series.Episodes,
+		&series.Id, &series.Name, &series.AnimedbId, &series.Episodes,
 		&seriesTypeId,
 	)
 
@@ -95,3 +95,22 @@ func SearchSeries(db storage.Queryer, name string) *Series {
 	return &series
 }
 
+func (series *Series) Update (db storage.Queryer) {
+	query := `
+        UPDATE series SET
+            name = ?,
+            animedb_id = ?,
+            episodes = ?,
+            series_type_id = ?
+        WHERE
+            series_id = ?
+    `
+	_, err := storage.PreparedExec(
+		db, query, series.Name, series.AnimedbId, series.Episodes, series.Type.Id, series.Id,
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	series.Type.Update(db)
+}

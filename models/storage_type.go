@@ -62,3 +62,18 @@ func SearchStorageType(db storage.Queryer, name string) *StorageType {
 
 	return &storageType
 }
+
+func (storageType *StorageType) Update (db storage.Queryer) {
+	query := `
+        UPDATE review_storage_type SET
+			name = ?
+        WHERE
+            review_storage_type_id = ?
+    `
+	_, err := storage.PreparedExec(
+		db, query, storageType.Name, storageType.Id,
+	)
+	if err != nil {
+		panic(err)
+	}
+}

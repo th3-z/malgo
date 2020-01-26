@@ -63,3 +63,17 @@ func SearchSeriesType(db storage.Queryer, name string) *SeriesType {
 	return &seriesType
 }
 
+func (seriesType *SeriesType) Update (db storage.Queryer) {
+	query := `
+        UPDATE series_type SET
+			name = ?
+        WHERE
+            series_type_id = ?
+    `
+	_, err := storage.PreparedExec(
+		db, query, seriesType.Name, seriesType.Id,
+	)
+	if err != nil {
+		panic(err)
+	}
+}

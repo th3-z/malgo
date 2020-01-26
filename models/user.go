@@ -70,3 +70,21 @@ func SearchUser(db storage.Queryer, name string) *User {
 
 	return &user
 }
+
+func (user *User) Update(db storage.Queryer) {
+	query := `
+        UPDATE user SET
+			name = ?
+        WHERE
+			user_id = ?
+    `
+
+	_, err := storage.PreparedExec(db, query, user.Name, user.Id)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, review := range user.Reviews {
+		review.Update(db)
+	}
+}

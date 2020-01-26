@@ -62,3 +62,18 @@ func SearchUserStatus(db storage.Queryer, name string) *ReviewStatus {
 
 	return &reviewStatus
 }
+
+func (reviewStatus *ReviewStatus) Update (db storage.Queryer) {
+	query := `
+        UPDATE review_status SET
+			name = ?
+        WHERE
+            review_status_id = ?
+    `
+	_, err := storage.PreparedExec(
+		db, query, reviewStatus.Name, reviewStatus.Id,
+	)
+	if err != nil {
+		panic(err)
+	}
+}

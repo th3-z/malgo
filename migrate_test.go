@@ -15,14 +15,3 @@ func TestMigrateFile(t *testing.T) {
 	storage.CreateSchema(db)
 	MigrateFile(db, inputFilename)
 }
-
-func TestMigrateString(t *testing.T) {
-	inputFilename := "sample.xml"
-	outputFilename := "output.sqlite"
-
-	db := storage.InitDB(outputFilename)
-	defer db.Close()
-
-	storage.CreateSchema(db)
-	MigrateFile(db, inputFilename)
-}

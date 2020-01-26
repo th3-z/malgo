@@ -37,12 +37,13 @@ func MigrateString(db *sql.DB, xml string) {
 		series.Episodes = animeXml.SeriesEpisodes
 
 		review := models.NewReview(tx, user.Id, series.Id)
+		review.Series = series
 		review.Status = models.NewUserStatus(tx, animeXml.MyStatus)
 		review.WatchedEpisodes = animeXml.MyWatchedEpisodes
 		startDate, _ := time.Parse(dateLayout, animeXml.MyStartDate)
-		review.StartDate = &startDate
+		review.StartDate = startDate
 		finishDate, _ := time.Parse(dateLayout, animeXml.MyFinishDate)
-		review.FinishDate = &finishDate
+		review.FinishDate = finishDate
 		review.Rated = animeXml.MyRated
 		review.Score = animeXml.MyScore
 		review.Dvd = animeXml.MyDvd
@@ -55,11 +56,8 @@ func MigrateString(db *sql.DB, xml string) {
 		review.RewatchingEp = animeXml.MyRewatchingEp
 
 		user.Reviews = append(user.Reviews, review)
-
-		print(series.Title)
-		print(" -> ")
-		print(series.Type.Id)
-
-		print("\n")
 	}
+
+	// Updates cascade
+	user.Update(tx)
 }

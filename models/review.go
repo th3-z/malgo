@@ -1,16 +1,16 @@
 package models
 
 import (
-	"github.com/th3-z/malgo/storage"
-	"time"
+    "github.com/th3-z/malgo/storage"
+    "time"
 )
 
 type Review struct {
 	Id               int64
 	Series           *Series
     WatchedEpisodes int
-    StartDate *time.Time
-    FinishDate *time.Time
+    StartDate time.Time
+    FinishDate time.Time
     Rated int
     Score int
     Dvd int
@@ -74,12 +74,22 @@ func GetReview(db storage.Queryer, userId int64, seriesId int64) *Review {
     var userStatusId int64
     var rewatchValueId int64
 
+    var startDate int64
+    var finishDate int64
+
     row.Scan(
-        &review.Id, &review.WatchedEpisodes, &review.StartDate,
-        &review.FinishDate, &review.Rated, &review.Score, &review.Dvd,
+        &review.Id, &review.WatchedEpisodes, &startDate,
+        &finishDate, &review.Rated, &review.Score, &review.Dvd,
         &storageTypeId, &userStatusId, &review.Comments, &review.TimesWatched,
         &rewatchValueId, &review.Tags, &review.Rewatching, &review.RewatchingEp,
     )
+
+    if startDate != 0 {
+        review.StartDate = time.Unix(startDate, 0)
+    }
+    if finishDate != 0 {
+        review.FinishDate = time.Unix(finishDate, 0)
+    }
 
     if seriesId != 0 {
         review.Series = GetSeries(db, seriesId)
@@ -118,4 +128,57 @@ func getUserReviews(db storage.Queryer, userId int64) []*Review {
     }
 
     return reviews
+}
+
+func (review *Review) Update(db storage.Queryer) {
+    query := `
+        UPDATE review SET
+            series_id = ?,
+            storage_type_id = ?,
+            user_status_id = ?,
+			rewatch_value_id = ?,
+
+            watched_episodes = ?,
+            start_date = ?,
+            finish_date = ?,
+            rated = ?,
+            score = ?,
+            dvd = ?,
+            comments = ?,
+            tags = ?,
+            times_watched = ?,
+            rewatching = ?,
+            rewatching_ep = ?
+        WHERE
+			review_id = ?
+    `
+
+    _, err := storage.PreparedExec(
+        db, query,
+        review.Series.Id,
+        review.Storage.Id,
+        review.Status.Id,
+        review.RewatchValue.Id,
+
+        review.WatchedEpisodes,
+        review.StartDate.Unix(),
+        review.FinishDate.Unix(),
+        review.Rated,
+        review.Score,
+        review.Dvd,
+        review.Comments,
+        review.Tags,
+        review.TimesWatched,
+        review.Rewatching,
+        review.RewatchingEp,
+        review.Id,
+    )
+    if err != nil {
+        panic(err)
+    }
+
+    review.Storage.Update(db)
+    review.Status.Update(db)
+    review.RewatchValue.Update(db)
+    review.Series.Update(db)
 }

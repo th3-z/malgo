@@ -62,3 +62,18 @@ func SearchRewatchValue(db storage.Queryer, name string) *RewatchValue {
 
 	return &rewatchValue
 }
+
+func (rewatchValue *RewatchValue) Update (db storage.Queryer) {
+	query := `
+        UPDATE review_rewatch_value SET
+			name = ?
+        WHERE
+            review_rewatch_value_id  = ?
+    `
+	_, err := storage.PreparedExec(
+		db, query, rewatchValue.Name, rewatchValue.Id,
+	)
+	if err != nil {
+		panic(err)
+	}
+}
