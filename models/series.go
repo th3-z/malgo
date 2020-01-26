@@ -21,19 +21,19 @@ func NewSeries(db storage.Queryer, name string) *Series {
         )
     `
 
-    seriesId, err := storage.PreparedExec(
+	seriesId, err := storage.PreparedExec(
 		db, query, name,
 	)
 
-    if err != nil {
-    	return SearchSeries(db, name)
+	if err != nil {
+		return SearchSeries(db, name)
 	}
 
-    return GetSeries(db, seriesId)
+	return GetSeries(db, seriesId)
 }
 
 func GetSeries(db storage.Queryer, seriesId int64) *Series {
-    query := `
+	query := `
         SELECT
             series_id,
             name,
@@ -46,22 +46,22 @@ func GetSeries(db storage.Queryer, seriesId int64) *Series {
             series_id = ?
     `
 
-    row := storage.PreparedQueryRow(
-        db, query, seriesId,
-    )
-    var series Series
-    var seriesTypeId int64
-    row.Scan(
-        &series.Id, &series.Name, &series.AnimedbId, &series.Episodes,
-        &seriesTypeId,
-    )
+	row := storage.PreparedQueryRow(
+		db, query, seriesId,
+	)
+	var series Series
+	var seriesTypeId int64
+	row.Scan(
+		&series.Id, &series.Name, &series.AnimedbId, &series.Episodes,
+		&seriesTypeId,
+	)
 
-    if seriesTypeId != 0 {
-        series.Type = GetSeriesType(db, seriesTypeId)
-        return &series
-    }
+	if seriesTypeId != 0 {
+		series.Type = GetSeriesType(db, seriesTypeId)
+		return &series
+	}
 
-    return &series
+	return &series
 }
 
 func SearchSeries(db storage.Queryer, name string) *Series {
@@ -95,7 +95,7 @@ func SearchSeries(db storage.Queryer, name string) *Series {
 	return &series
 }
 
-func (series *Series) Update (db storage.Queryer) {
+func (series *Series) Update(db storage.Queryer) {
 	query := `
         UPDATE series SET
             name = ?,

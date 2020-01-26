@@ -5,8 +5,8 @@ import (
 )
 
 type ReviewStatus struct {
-	Id int
-	Name         string
+	Id   int
+	Name string
 }
 
 func NewUserStatus(db storage.Queryer, name string) *ReviewStatus {
@@ -63,7 +63,7 @@ func SearchUserStatus(db storage.Queryer, name string) *ReviewStatus {
 	return &reviewStatus
 }
 
-func (reviewStatus *ReviewStatus) Update (db storage.Queryer) {
+func (reviewStatus *ReviewStatus) Update(db storage.Queryer) {
 	query := `
         UPDATE review_status SET
 			name = ?

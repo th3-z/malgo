@@ -26,9 +26,9 @@ const (
             review_id INTEGER PRIMARY KEY NOT NULL,
             user_id INTEGER NOT NULL,
             series_id INTEGER NOT NULL,
-            storage_type_id INTEGER,	
-            user_status_id INTEGER,
-			rewatch_value_id INTEGER,
+            review_storage_type_id INTEGER,	
+            review_status_id INTEGER,
+			review_rewatch_value_id INTEGER,
 
             watched_episodes INTEGER,
             start_date INTEGER,

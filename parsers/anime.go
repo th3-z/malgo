@@ -7,12 +7,12 @@ import (
 )
 
 type AnimeXml struct {
-	SeriesAnimedbId   int
-	SeriesTitle       string
-	SeriesType        string
-	SeriesEpisodes    int
+	SeriesAnimedbId int
+	SeriesTitle     string
+	SeriesType      string
+	SeriesEpisodes  int
 	// <my_id> ignored
-	MyId    int
+	MyId              int
 	MyWatchedEpisodes int
 	MyStartDate       string
 	MyFinishDate      string
@@ -68,7 +68,7 @@ func ParseAnimeXml(xml string) *[]AnimeXml {
 			SeriesType:        seriesType,
 			SeriesAnimedbId:   seriesAnimedbId,
 			SeriesEpisodes:    seriesEpisodes,
-			MyId:    myId,
+			MyId:              myId,
 			MyWatchedEpisodes: myWatchedEpisodes,
 			MyStartDate:       myStartDate,
 			MyFinishDate:      myFinishDate,
@@ -82,7 +82,7 @@ func ParseAnimeXml(xml string) *[]AnimeXml {
 			MyTimesWatched:    myTimesWatched,
 			MyRewatchValue:    myRewatchValue,
 			MyRewatchingEp:    myRewatchingEp,
-			MyRewatching:    myRewatching,
+			MyRewatching:      myRewatching,
 		}
 		animeXml = append(animeXml, a)
 	}

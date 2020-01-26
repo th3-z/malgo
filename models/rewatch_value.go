@@ -5,8 +5,8 @@ import (
 )
 
 type RewatchValue struct {
-	Id int
-	Name         string
+	Id   int
+	Name string
 }
 
 func NewRewatchValue(db storage.Queryer, name string) *RewatchValue {
@@ -63,7 +63,7 @@ func SearchRewatchValue(db storage.Queryer, name string) *RewatchValue {
 	return &rewatchValue
 }
 
-func (rewatchValue *RewatchValue) Update (db storage.Queryer) {
+func (rewatchValue *RewatchValue) Update(db storage.Queryer) {
 	query := `
         UPDATE review_rewatch_value SET
 			name = ?

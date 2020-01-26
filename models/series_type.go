@@ -5,12 +5,12 @@ import (
 )
 
 type SeriesType struct {
-	Id int
-	Name         string
+	Id   int
+	Name string
 }
 
 func NewSeriesType(db storage.Queryer, name string) *SeriesType {
-    query := `
+	query := `
         INSERT INTO series_type (
             name
         ) VALUES (
@@ -18,13 +18,13 @@ func NewSeriesType(db storage.Queryer, name string) *SeriesType {
         )
     `
 
-    seriesTypeId, err := storage.PreparedExec(
+	seriesTypeId, err := storage.PreparedExec(
 		db, query, name,
 	)
 	if err != nil {
 		return SearchSeriesType(db, name)
 	}
-    return GetSeriesType(db, seriesTypeId)
+	return GetSeriesType(db, seriesTypeId)
 }
 
 func GetSeriesType(db storage.Queryer, seriesTypeId int64) *SeriesType {
@@ -38,11 +38,11 @@ func GetSeriesType(db storage.Queryer, seriesTypeId int64) *SeriesType {
     `
 	row := storage.PreparedQueryRow(
 		db, query, seriesTypeId,
-    )
-    var seriesType SeriesType
-    row.Scan(&seriesType.Id, &seriesType.Name)
+	)
+	var seriesType SeriesType
+	row.Scan(&seriesType.Id, &seriesType.Name)
 
-    return &seriesType
+	return &seriesType
 }
 
 func SearchSeriesType(db storage.Queryer, name string) *SeriesType {
@@ -63,7 +63,7 @@ func SearchSeriesType(db storage.Queryer, name string) *SeriesType {
 	return &seriesType
 }
 
-func (seriesType *SeriesType) Update (db storage.Queryer) {
+func (seriesType *SeriesType) Update(db storage.Queryer) {
 	query := `
         UPDATE series_type SET
 			name = ?

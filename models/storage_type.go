@@ -5,8 +5,8 @@ import (
 )
 
 type StorageType struct {
-	Id int
-	Name         string
+	Id   int
+	Name string
 }
 
 func NewStorageType(db storage.Queryer, name string) *StorageType {
@@ -63,7 +63,7 @@ func SearchStorageType(db storage.Queryer, name string) *StorageType {
 	return &storageType
 }
 
-func (storageType *StorageType) Update (db storage.Queryer) {
+func (storageType *StorageType) Update(db storage.Queryer) {
 	query := `
         UPDATE review_storage_type SET
 			name = ?

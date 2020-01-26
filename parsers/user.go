@@ -7,8 +7,8 @@ import (
 )
 
 type UserXml struct {
-	UserId               int
-	UserName             string
+	UserId   int
+	UserName string
 	// <user_export_type> ignored
 	// <user_total_anime> ignored
 	// <user_total_watching> ignored

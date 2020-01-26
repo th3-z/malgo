@@ -5,9 +5,9 @@ import (
 )
 
 type User struct {
-	Id               int64
-	Name             string
-    Reviews []*Review
+	Id      int64
+	Name    string
+	Reviews []*Review
 }
 
 func NewUser(db storage.Queryer, name string) *User {
@@ -24,7 +24,7 @@ func NewUser(db storage.Queryer, name string) *User {
 }
 
 func GetUser(db storage.Queryer, userId int64) *User {
-    query := `
+	query := `
         SELECT
             user_id,
             name
@@ -34,17 +34,17 @@ func GetUser(db storage.Queryer, userId int64) *User {
             user_id = ?
     `
 
-    row := storage.PreparedQueryRow(
-        db, query, userId,
-    )
-    var user User
-    row.Scan(
-        &user.Id, &user.Name,
-    )
+	row := storage.PreparedQueryRow(
+		db, query, userId,
+	)
+	var user User
+	row.Scan(
+		&user.Id, &user.Name,
+	)
 
 	user.Reviews = getUserReviews(db, userId)
 
-    return &user
+	return &user
 }
 
 func SearchUser(db storage.Queryer, name string) *User {
