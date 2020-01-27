@@ -77,3 +77,18 @@ func (seriesType *SeriesType) Update(db storage.Queryer) {
 		panic(err)
 	}
 }
+
+func (seriesType *SeriesType) Delete(db storage.Queryer) {
+	query := `
+        DELETE FROM series_type
+        WHERE
+            series_type_id = ?
+    `
+	_, err := storage.PreparedExec(
+		db, query, seriesType.Id,
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+

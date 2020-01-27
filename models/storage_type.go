@@ -77,3 +77,17 @@ func (storageType *StorageType) Update(db storage.Queryer) {
 		panic(err)
 	}
 }
+
+func (storageType *StorageType) Delete(db storage.Queryer) {
+	query := `
+        DELETE FROM review_storage_type
+        WHERE
+            review_storage_type_id = ?
+    `
+	_, err := storage.PreparedExec(
+		db, query, storageType.Id,
+	)
+	if err != nil {
+		panic(err)
+	}
+}

@@ -88,3 +88,16 @@ func (user *User) Update(db storage.Queryer) {
 		review.Update(db)
 	}
 }
+
+func (user *User) Delete(db storage.Queryer) {
+	query := `
+        DELETE FROM user
+        WHERE
+			user_id = ?
+    `
+
+	_, err := storage.PreparedExec(db, query, user.Id)
+	if err != nil {
+		panic(err)
+	}
+}

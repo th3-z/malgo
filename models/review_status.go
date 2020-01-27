@@ -77,3 +77,17 @@ func (reviewStatus *ReviewStatus) Update(db storage.Queryer) {
 		panic(err)
 	}
 }
+
+func (reviewStatus *ReviewStatus) Delete(db storage.Queryer) {
+	query := `
+        DELETE FROM review_status
+        WHERE
+            review_status_id = ?
+    `
+	_, err := storage.PreparedExec(
+		db, query, reviewStatus.Id,
+	)
+	if err != nil {
+		panic(err)
+	}
+}

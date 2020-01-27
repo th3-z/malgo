@@ -77,3 +77,17 @@ func (rewatchValue *RewatchValue) Update(db storage.Queryer) {
 		panic(err)
 	}
 }
+
+func (rewatchValue *RewatchValue) Delete(db storage.Queryer) {
+	query := `
+        DELETE FROM review_rewatch_value
+        WHERE
+            review_rewatch_value_id  = ?
+    `
+	_, err := storage.PreparedExec(
+		db, query, rewatchValue.Id,
+	)
+	if err != nil {
+		panic(err)
+	}
+}

@@ -182,3 +182,20 @@ func (review *Review) Update(db storage.Queryer) {
 	review.RewatchValue.Update(db)
 	review.Series.Update(db)
 }
+
+func (review *Review) Delete(db storage.Queryer) {
+	query := `
+        DELETE FROM review
+        WHERE
+			review_id = ?
+    `
+
+	_, err := storage.PreparedExec(
+		db, query,
+		review.Id,
+    )
+
+	if err != nil {
+		panic(err)
+	}
+}
