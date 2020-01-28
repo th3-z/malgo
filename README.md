@@ -11,7 +11,7 @@ A MyAnimeList SQL migration utility and Go library.
 
 ## Databases
 
-Malgo has so far been tested with the following databases.
+Malgo has so far been tested with the following databases. Let me know if you have success with any of the other database drivers.
 
 * Sqlite3
 
