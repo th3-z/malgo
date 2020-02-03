@@ -17,7 +17,7 @@ Malgo has so far been tested with the following databases. Let me know if you ha
 
 ## Golang examples
 
-The golang module provides structs and functions for reading and editing the migrated database. A more complex example can be seen on [my public website](https://github.com/th3-z/beta-th3-z-xyz)'s repo.
+The golang module provides structs and functions for reading and editing the migrated database.
 
 #### Migrate directly from an exported anime list and retrieve series.
 ```
@@ -30,6 +30,12 @@ for _, review := range user.Reviews {
     print("\n")
 }
 ```
+
+#### Datatables example
+A more complex example can be seen on [my public website](https://github.com/th3-z/beta-th3-z-xyz)'s repo. It produces the following table.
+
+![Image of example usage](https://files.th3-z.xyz/standing/malgo.png)
+
 
 ## Building
 
