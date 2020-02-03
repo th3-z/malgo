@@ -45,4 +45,5 @@ Run `make build` to create a release for the CLI tool in `./bin`.
 
 * Golang 1.13.x
 * make
+* gcc
 
